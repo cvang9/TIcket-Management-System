@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket Details</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .ticket-container {
+      width: 80%;
+      max-width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .ticket-details {
+      margin-bottom: 20px;
+    }
+
+    .ticket-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .ticket-description {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .ticket-priority {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .ticket-department {
+      margin-top: 5px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .chat-button {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .chat-button:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket-container">
+    <div class="ticket-details">
+      <div class="ticket-title" >Title: <%= data.title%></div>
+      <div class="ticket-description">Description: <%= data.description %></div>
+      <div class="ticket-priority"> Priority: <%= data.priority%></div>
+      <div class="ticket-department">Department: <%= data.department%></div>
+      <div class="ticket-department">STATUS: <%= data.status%></div>
+    </div>
+    <button class="chat-button">Start Chat</button>
+  </div>
+</body>
+<script>
+    const chatButton = document.querySelector('.chat-button');
+    
+    chatButton.addEventListener('click', () => {
+        window.location.href = '/chat';
+    });
+</script>
+</html>

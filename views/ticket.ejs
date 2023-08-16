@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Management System</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #111111;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .ticket-form {
+    background-color: #222222;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+  }
+
+  .ticket-form h1 {
+    margin: 0 0 20px;
+    color: #ffffff;
+  }
+
+  .ticket-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #cccccc;
+    font-weight: bold;
+  }
+
+  .ticket-form input[type="text"],
+  .ticket-form textarea,
+  .ticket-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #333333;
+  }
+
+  .ticket-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 10px;
+    background: url('arrow-down.png') no-repeat right #333333;
+  }
+
+  .ticket-form button {
+    background-color: #00cc99;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .ticket-form button:hover {
+    background-color: #00997a;
+  }
+</style>
+</head>
+<body>
+
+<div class="ticket-form">
+  <h1>Create New Ticket</h1>
+  <% if(message) { %>
+        <p style="color: green;"><%= message %></p>
+<%} %>
+  <form action="/ticket/raise" method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" required></textarea>
+
+    <label for="priority">Priority:</label>
+    <select id="priority" name="priority" required>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+ 
+    <br/>
+    
+    <label for="department">Department:</label>
+    <select id="priority" name="department" required>
+        <option value="technical">technical</option>
+        <option value="electrical">electrical</option>
+        <option value="others">others</option>
+      </select>
+
+    <button type="submit">Create Ticket</button>
+    
+  </form>
+  <br/>
+  <div style="flex:auto">
+  <form method="get" action="/ticket/edit"> <button style="color:blue" type="submit">Edit Ticket</button> </form>
+  <br/>
+  <form method="get" action="/ticket/delete"> <button style="color:red" type="submit">Delete Ticket</button> </form>
+  <br/>
+  <form method="get" action="/ticket/status"> <button  type="submit">Check Details</button> </form>
+</div>
+</div>
+</body>
+<script>
+
+</script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultra Attractive Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1c1c1c;
+      color: #fff;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      background-color: #2d2d2d;
+      border-radius: 10px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+    }
+
+    .dashboard h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      margin-left: 10px;
+      margin-right: auto;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard">
+      <h1>Welcome to TMS Dashboard</h1>
+      <div class="buttons">
+        <a href="/userlogin" class="button">Log In as User</a>
+        <a href="/adminlogin" class="button">Log In as Admin</a>
+        <a href="/resolver/login" class="button">Log In as Resolver</a>
+      </div>       
+    </div>
+  </div>
+</body>
+</html>
