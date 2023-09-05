@@ -58,7 +58,7 @@ const upload = multer({storage: multerStorage, fileFilter: filter });
 
 
 // Mongo DB
-const URL = 'mongodb+srv://dogesh:huehuehue@shoeman.azopfnn.mongodb.net/?retryWrites=true&w=majority';
+const URL = '';
 connectDB.connectDB(URL);
 
 
