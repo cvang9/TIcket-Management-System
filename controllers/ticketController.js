@@ -1,4 +1,5 @@
 const Model = require('../models/ticketModel.js');
+const messageModel = require('../models/messageModel.js')
 
 class TicketController{
 
@@ -46,7 +47,7 @@ class TicketController{
         }
         try {
             const result = await Model.TicketModel.findById(req.body.ticketid);
-            console.log(result)
+            console.log('ticket id - ' + result._id)
             if( result ) res.render('ticketDetails', {data:result});
             
         } catch (error) {
@@ -93,11 +94,13 @@ class TicketController{
         }
         try {
             const ticketID = req.body.ticketId;
-            const result = await Model.TicketModel.findByIdAndDelete(ticketID);
 
-            if( req.session.isUser )
+            if( req.session.isUser || req.session.isResolver )
             {
-                if(result ) res.render('ticket', {message: "Successfully deleted your raised ticket" } );
+                const result = await Model.TicketModel.findByIdAndDelete(ticketID);
+
+                const result2 = await messageModel.MessageModel.deleteMany({ticketId: ticketID});
+                if(result && result2  ) res.render('ticket', {message: "Successfully deleted your raised ticket" } );
             }
             else{
                 res.status(200).send({result:'true'});

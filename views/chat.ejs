@@ -146,7 +146,10 @@
   </style>
 </head>
 <body>
+
+    
   <div class="chat-container">
+
     <div class="chat-log" id="chat-log">
       <!-- Chat messages will appear here -->
     </div>
@@ -155,49 +158,125 @@
         <input type="text" class="message-input" id="message-input" placeholder="Type your message...">
         <button class="send-button" id="send-button" >  Send</button>
         </div>
+        <input type="file" id="imgInput" class="message-input"  placeholder="your file..." name="chatImg"  style="color:black" >
+        <button  id="img-button"  class="send-button" > Attach image</button>
 
-    <form method="post" enctype="multipart/form-data" >
+    <!-- <form method="post" action="/messages/image/<%=ticketId%>" enctype="multipart/form-data" >
         <input type="file" class="message-input"  placeholder="your file..." name="chatImg"  style="color:black" >
         <button class="send-button" type="submit"> Attach image</button>
-    </form>
+    </form> -->
 
   </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-    var socket = io();
-
-    
 
     const chatLog = document.getElementById('chat-log');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
     let isCurrentUserSender = true;
-
-    let userRole = '';
-
-    fetch('/getUserRole')
-    .then(function(data){
-        return data.json();
-    })
-    .then(function(data){
-        console.log(data)
-        userRole = data.role
-        
-        sendButton.addEventListener( 'click', function(){
-        
-            const messageText = messageInput.value.trim();
-            socket.emit('chat message', { user: userRole ,message: messageText });
-        
-        });                     
-    });                                                                                          
+    let socket;
+    const ticketId = prompt('Enter Ticket Id');
 
 
-    socket.on('chat message', function(msg) {
+    fetch(`/messages/all/${ticketId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then( function(data){
+         socket = io();
+         return data.json();
+    }).then(function(data){
+         data.forEach( function( msg ){
+            showMessage(msg);
+         })
+    }).then(function(){
+
+        let userRole = '';
+
+        fetch('/getUserRole')
+        .then(function(data){
+            return data.json();
+        })
+        .then(function(data){
+            userRole = data.role
+            
+            sendButton.addEventListener( 'click', function(){
+            
+                const messageText = messageInput.value.trim();
+                socket.emit('chat message', { user: userRole ,message: messageText, ticketId: ticketId });
+            
+            });                     
+        });
+
+        socket.on('chat message', function(msg) {
+                showMessage(msg);
+        });
         
-        const messageDiv = document.createElement('div');
+        
+            
+            const input = document.getElementById('imgInput'); // Adjust the selector as needed
+
+            // Get the send button element
+            const imgButton = document.getElementById('img-button'); // Adjust the selector as needed
+
+            // Add an event listener to the send button
+            imgButton.addEventListener('click', handleSendButton);
+
+            // Event handler for send button
+            function handleSendButton(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const selectedFile = input.files[0];
+
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('chatImg', selectedFile);
+                formData.append('role', userRole );
+                const url = `/messages/image/${ticketId}`; // Replace with the actual URL
+
+                // Send the file using Fetch API
+                fetch(url, {
+                method: 'POST',
+                body: formData,
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .then( function(data){
+                    showMessage(data);
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+            }
+            }
+
+
+})
+
+
+  function showMessage(msg)
+  {
+    const messageDiv = document.createElement('div');
         const messageClassName = msg.role === 'user' ? 'user-message' : 'resolver-message';
-        messageDiv.className = `chat-message ${messageClassName}`;
+
+        if( msg.filename )
+        {
+            messageDiv.className = `chat-message ${messageClassName}`;
+            messageDiv.innerHTML = `
+            <div class="message-content">
+                <img src="/${msg.filename}" style="width: 100px; height: 100px;"/>
+            </div>
+            <div class="avatar"></div>
+            `;
+            chatLog.appendChild(messageDiv);
+            messageInput.value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+        else{
+            messageDiv.className = `chat-message ${messageClassName}`;
         messageDiv.innerHTML = `
           <div class="message-content">
             <div class="message-text">${msg.message}</div>
@@ -207,8 +286,8 @@
         chatLog.appendChild(messageDiv);
         messageInput.value = '';
         chatLog.scrollTop = chatLog.scrollHeight;
-
-  });
+        }
+  }
 
 
     

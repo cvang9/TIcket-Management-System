@@ -95,7 +95,7 @@
       title.textContent = cardData.title;
 
       const ticketId = document.createElement('p');
-      ticketId.textContent = 'Ticket ID: '+cardData._id;
+      ticketId.textContent = 'Ticket ID: '+ cardData._id;
 
       const description = document.createElement('p');
       description.textContent = 'Description: '+cardData.description;
@@ -110,8 +110,8 @@
       const button = document.createElement('button');
       button.textContent = 'Chat';
       button.addEventListener('click', () => {
-            window.location.href = `/chat/`;
-        });
+            window.location.href = `/chat/${cardData._id}}`;
+       });
 
       const markButton = document.createElement('button');
       markButton.textContent = 'Mark as Resolved';

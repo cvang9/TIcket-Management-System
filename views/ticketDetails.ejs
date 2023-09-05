@@ -80,14 +80,7 @@
       <div class="ticket-department">Department: <%= data.department%></div>
       <div class="ticket-department">STATUS: <%= data.status%></div>
     </div>
-    <button class="chat-button">Start Chat</button>
+    <form action="/chat/<%= data._id %>"> <button type="submit" class="chat-button">Start Chat</button> </form>
   </div>
 </body>
-<script>
-    const chatButton = document.querySelector('.chat-button');
-    
-    chatButton.addEventListener('click', () => {
-        window.location.href = '/chat';
-    });
-</script>
 </html>

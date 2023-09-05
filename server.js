@@ -5,9 +5,12 @@ const chatRouter = require('./routes/chatRoute.js');
 const UserRouter = require('./routes/userRoute.js');
 const AdminRouter = require('./routes/adminRoute.js');
 const ResolverRouter = require('./routes/resolverRoute.js');
+const MessagesRouter = require('./routes/messageRoute.js');
 const session = require('express-session');
 const multer = require('multer');
 
+//Models
+const messageModel = require('./models/messageModel.js');
 
 //Socket.IO
 const app = express();
@@ -31,11 +34,28 @@ const multerStorage = multer.diskStorage({
         callback(null,__dirname+'/uploads');
     },
     filename: function( req, file, callback ){
+        console.log(file);
         callback( null, file.originalname );
     },
 })
 
-const upload = multer({storage: multerStorage });
+function filter( req, file, cb )
+{
+    if( req.url === '/messages/image/:ticketId' )
+    {
+        if( file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png' )
+        {
+            cb( null, true );
+        }
+        else{
+            cb( null, false );
+        }
+    }
+}
+
+const upload = multer({storage: multerStorage, fileFilter: filter });
+
+
 
 // Mongo DB
 const URL = 'mongodb+srv://dogesh:huehuehue@shoeman.azopfnn.mongodb.net/?retryWrites=true&w=majority';
@@ -77,6 +97,7 @@ app.use('/chat', chatRouter.router );
 app.use('/userlogin', UserRouter.router );
 app.use('/adminlogin', AdminRouter.router );
 app.use('/resolver', ResolverRouter.router );
+app.use('/messages', MessagesRouter.router );
 
 
 //Server
@@ -88,8 +109,16 @@ server.listen(3000, ()=>{
 //SocketIO Talks
 io.on('connection', (socket) => {
 
-    socket.on('chat message', (msg) => {
-            io.emit('chat message', { role: msg.user ,message:  msg.message} );
+    socket.on('chat message', async (msg) => {
+
+           const doc = {
+            role: msg.user,
+            ticketId: msg.ticketId,
+            message: msg.message
+           }
+           
+           const res = await messageModel.MessageModel.create(doc);
+           io.emit('chat message', { role: msg.user ,message:  msg.message} );
       });
 
-  });
+});

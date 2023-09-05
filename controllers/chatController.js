@@ -3,10 +3,12 @@ class ChatController {
     static chatDashboard = (req,res) => {
         if( !req.session.isUser && !req.session.isResolver )
         {
-            res.redirect('/userlogin');
+            res.redirect('/');
             return;
         }
-        res.render('chat');
+
+        const ticketId = req.params.ticketId;
+        res.render('chat', {ticketId: ticketId});
     }
 }
 
